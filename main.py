@@ -19,7 +19,7 @@ class County:
         return calc_disctance(self.la, self.lo, other.la, other.lo)
 
     def __repr__(self):
-        text = "County: " + self.name + " state: " + self.state + " la: " + self.la + " lo: " + self.lo
+        text = "County: " + self.name + " state: " + self.state + " la: " + str(self.la) + " lo: " + str(self.lo)
         return text
 
 class NearestStateCountyFinder:
@@ -35,8 +35,8 @@ class NearestStateCountyFinder:
             data_line = line.split(",")
             county = data_line[0]
             state = data_line[4]
-            latitude = data_line[6]
-            longitude = data_line[7]
+            latitude = float(data_line[6][1:-1])
+            longitude = float(data_line[7][1:-1])
             new_county = County(county, state, latitude, longitude)
             if new_county not in self.countyList:
                 self.countyList.append(new_county)
@@ -51,8 +51,13 @@ class NearestStateCountyFinder:
 
 def calc_disctance(la1, lo1, la2, lo2):
     R = 6371
+    la1 = la1 * m.pi / 180
+    la2 = la2 * m.pi / 180
+    lo1 = lo1 * m.pi / 180
+    lo2 = lo2 * m.pi / 180
+
     x = (lo2 - lo1) * m.cos((la1 + la2) / 2)
-    y = (la1 + la2)
+    y = (la2 - la1)
     distance = R * m.sqrt(x*x + y*y)
     return distance
 
