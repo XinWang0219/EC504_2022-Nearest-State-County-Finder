@@ -4,6 +4,7 @@ import pandas as pd
 data_file_addr = "data/uscounties.csv"
 pd.options.display.max_rows = 9999
 
+
 class County:
     def __init__(self, name, state, la, lo):
         self.name = name
@@ -14,11 +15,18 @@ class County:
     def dist(self, la, lo):
         return calc_disctance(self.la, self.lo, la, lo)
 
+    def dist(self, other):
+        return calc_disctance(self.la, self.lo, other.la, other.lo)
+
+    def __repr__(self):
+        text = "County: " + self.name + " state: " + self.state + " la: " + self.la + " lo: " + self.lo
+        return text
 
 class NearestStateCountyFinder:
     def __init__(self):
         self.built_success = False
-        self.countyList = {}
+        self.load_success = False
+        self.countyList = []
 
     def load_data(self, file_addr):
         f = open(file_addr)
@@ -29,9 +37,11 @@ class NearestStateCountyFinder:
             state = data_line[4]
             latitude = data_line[6]
             longitude = data_line[7]
-        print(data[0])
+            new_county = County(county, state, latitude, longitude)
+            if new_county not in self.countyList:
+                self.countyList.append(new_county)
 
-        self.built_success = True
+        self.load_success = True
         return 1
 
     def search_nearest(self, latitude, longitude, k=5):
@@ -53,9 +63,10 @@ if __name__ == "__main__":
     welcome_text = """
     Welcome to use Nearest State/County Finder System
     Please excute following commands:
-    -load
-    -search (latitude) (longitude) (K)
-    -exit
+    -load                               # load data
+    -disp load                          # display load data
+    -search (latitude) (longitude) (K)  # search for nearest k number of counties by input latitude and longitude
+    -exit                               # exit application
     """
 
     while 1:
@@ -64,6 +75,10 @@ if __name__ == "__main__":
         print(cmd)
         if cmd == '-load':
             app.load_data(data_file_addr)
+
+        if cmd == '-disp load':
+            for county in app.countyList:
+                print(county)
 
         elif cmd[:7] == '-search':
             if not app.built_success:
