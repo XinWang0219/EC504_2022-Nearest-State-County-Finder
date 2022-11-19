@@ -1,5 +1,6 @@
 import math as m
 import pandas as pd
+from heapq import heapify, heappush, heappop
 
 data_file_addr = "data/uscounties.csv"
 pd.options.display.max_rows = 9999
@@ -12,15 +13,24 @@ class County:
         self.la = la
         self.lo = lo
 
-    def dist(self, la, lo):
+    def dist(self, la:float, lo:float):
         return calc_disctance(self.la, self.lo, la, lo)
 
-    def dist(self, other):
-        return calc_disctance(self.la, self.lo, other.la, other.lo)
+    # def dist(self, other):
+    #     return calc_disctance(self.la, self.lo, other.la, other.lo)
 
     def __repr__(self):
         text = "County: " + self.name + " state: " + self.state + " la: " + str(self.la) + " lo: " + str(self.lo)
         return text
+
+class countyDistance:
+    def __init__(self, distance: float, county: County):
+        self.distance=distance
+        self.county=county
+
+    def __lt__(self, other):
+        return self.distance<other.distance
+
 
 class NearestStateCountyFinder:
     def __init__(self):
@@ -44,9 +54,21 @@ class NearestStateCountyFinder:
         self.load_success = True
         return 1
 
-    def search_nearest(self, latitude, longitude, k=5):
-        print("To be finished")
-        return 1
+    def search_nearest(self, la, lo, k=5):
+        county_distances = []
+        for county in self.countyList:
+            distance = county.dist(la, lo)
+            tmp = countyDistance(distance, county)
+            heappush(county_distances, tmp)
+        res = []
+        dis = []
+        for i in range(10):
+            tmp = heappop(county_distances)
+            county = tmp.county
+            res.append(county)
+            dis.append(tmp.distance)
+
+        return res
 
 
 def calc_disctance(la1, lo1, la2, lo2):
@@ -86,7 +108,7 @@ if __name__ == "__main__":
                 print(county)
 
         elif cmd[:7] == '-search':
-            if not app.built_success:
+            if not app.load_success:
                 print("DataError: No System is built. Please load data to build search system")
                 continue
             else:
@@ -95,8 +117,9 @@ if __name__ == "__main__":
                 print(latitude)
                 print(longitude)
                 print(k)
-                result = app.search_nearest(latitude, longitude, k)
-                print(result)
+                result = app.search_nearest(float(latitude), float(longitude), int(k))
+                for county in result:
+                    print(county)
                 continue
         if cmd == '-exit':
             break
