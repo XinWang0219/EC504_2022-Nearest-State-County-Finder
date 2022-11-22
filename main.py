@@ -62,7 +62,7 @@ class NearestStateCountyFinder:
             heappush(county_distances, tmp)
         res = []
         dis = []
-        for i in range(10):
+        for i in range(k):
             tmp = heappop(county_distances)
             county = tmp.county
             res.append(county)
