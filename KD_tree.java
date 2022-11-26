@@ -1,16 +1,22 @@
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
 public class KD_tree {
-    ArrayList<Point> points;
+    private ArrayList<Point> points;
     Point root;
+
+    private int size;
 
     public KD_tree(){
         points=new ArrayList<>();
+        size=0;
+    }
+    public int size(){
+        return this.size;
     }
     public void insert(Point p) {
         p.judge=false;
         points.add(p);
+        size++;
     }
     //找root节点
     public void init(){
@@ -29,7 +35,7 @@ public class KD_tree {
     }
     //root leftchild rightchild needs to be done
     // to find the leftchild and rightchild
-    public void buildTree(Point root){
+    private void buildTree(Point root){
         if(root.leftChilds.size()>0) {
             Collections.sort(root.leftChilds);
             root.left=root.leftChilds.get(root.leftChilds.size()/2);
@@ -47,8 +53,32 @@ public class KD_tree {
         return;
     }
 
+    public void layerPrint(){
+        Queue<Point> base=new LinkedList<>();
+        Point curend=root;
+        Point nextend=null;
+        base.add(root);
+        while(!base.isEmpty()) {
+            Point tmp=base.poll();
+            System.out.printf("(%.2f,%.2f) ",tmp.getX(),tmp.getY());
+            if(tmp.left!=null) {
+                base.add(tmp.left);
+                nextend=tmp.left;
+            }
+            if(tmp.right!=null) {
+                base.add(tmp.right);
+                nextend=tmp.right;
+            }
+            if(tmp==curend) {
+                System.out.println();
+                curend=nextend;
+                nextend=null;
+            }
+        }
+    }
+
     // base needs to be sorted, root needs to be in base
-    public void getPointChilds(Point root,ArrayList<Point> base){
+    private void getPointChilds(Point root,ArrayList<Point> base){
         for(Point i:base) {
             if(i!=root) {
                 i.father=root;
@@ -58,5 +88,73 @@ public class KD_tree {
                 i.judge=!root.judge;
             }
         }
+    }
+
+    public ArrayList<Point> KNearestNeighbor(int k,Point p) {
+        ArrayList<Point> res=new ArrayList<>();
+        PriorityQueue<Point> maxHeap=new PriorityQueue<>((a,b)->{
+            double d1=a.distance(p);
+            double d2=b.distance(p);
+            if(d1<d2) {return 1;}
+            else if(d1==d2) {return 0;}
+            else {return -1;}
+//            return (int)(d2-d1);
+        });
+        Point tmp=this.root;
+        //利用递归搜索
+        recursionSearch(p,tmp,maxHeap,k);
+        while(!maxHeap.isEmpty()){
+            res.add(maxHeap.poll());
+        }
+        return res;
+    }
+    //a.compareTo(b)用的是a的judge
+    private void recursionSearch(Point target,Point cur,PriorityQueue<Point> maxHeap,int k) {
+        if(cur==null) {return ;}
+        //先去递归找叶子，然后一层层回来
+        if(cur.compareTo(target)>=0) {
+            recursionSearch(target,cur.left,maxHeap,k);
+            //看看target点到右边平面的直线距离是不是比左边最长距离还短，如果是，就在右边也可能存在点
+            if(cur.right!=null) {
+                if(maxHeap.isEmpty()||maxHeap.size()<k) {recursionSearch(target, cur.right, maxHeap,k);}
+                else {
+                    double maxdistance = maxHeap.peek().distance(target);
+                    double targetToRight;
+                    if (!cur.right.judge) {
+                        targetToRight = Math.abs(target.getX() - cur.right.getX());
+                    } else {
+                        targetToRight = Math.abs(target.getY() - cur.right.getY());
+                    }
+                    if (targetToRight < maxdistance || maxHeap.size() < k) {
+                        recursionSearch(target, cur.right, maxHeap, k);
+                    }
+                }
+            }
+        }
+        else{
+            recursionSearch(target,cur.right,maxHeap,k);
+            if(cur.left!=null) {
+                if(maxHeap.isEmpty()||maxHeap.size()<k) {recursionSearch(target, cur.left, maxHeap,k);}
+                else {
+                    double maxdistance = maxHeap.peek().distance(target);
+                    double targetToLeft;
+                    if (!cur.left.judge) {
+                        targetToLeft = Math.abs(target.getX() - cur.left.getX());
+                    } else {
+                        targetToLeft = Math.abs(target.getY() - cur.left.getY());
+                    }
+                    if (targetToLeft < maxdistance || maxHeap.size() < k) {
+                        recursionSearch(target, cur.left, maxHeap, k);
+                    }
+                }
+            }
+        }
+        //看看自己满不满足要求
+        if(maxHeap.size()<k) {maxHeap.add(cur);}
+        else if(cur.distance(target)<maxHeap.peek().distance(target)) {
+            maxHeap.poll();
+            maxHeap.add(cur);
+        }
+
     }
 }

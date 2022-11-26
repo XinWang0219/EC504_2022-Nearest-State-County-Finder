@@ -3,6 +3,8 @@ import java.util.ArrayList;
 public class Point implements Comparable<Point>{
     private double x;
     private double y;
+
+    public String name="undefined";
     public boolean judge=false; // false -> x , true -> y
     public int depth;
     public Point left=null;
@@ -10,6 +12,14 @@ public class Point implements Comparable<Point>{
     public Point father=null;
     public ArrayList<Point> leftChilds;
     public ArrayList<Point> rightChilds;
+    public Point(double x,double y,String name){
+        this.x=x;
+        this.y=y;
+        this.depth=0;
+        this.leftChilds=new ArrayList<>();
+        this.rightChilds=new ArrayList<>();
+        this.name=name;
+    }
     public Point(double x,double y){
         this.x=x;
         this.y=y;
@@ -35,14 +45,19 @@ public class Point implements Comparable<Point>{
         double x_other=other.getX();
         double y_other=other.getY();
         double R=6371;
-        double phi1=x*Math.PI/180;
-        double phi2= x_other*Math.PI/180;
-        double delta_phi=(phi2-phi1);
-        double delta_lamda=(y_other-y)*Math.PI/180;
-        double a=Math.sin(delta_phi/2)*Math.sin(delta_phi/2)+Math.cos(phi1)*Math.cos(phi2)*Math.sin(delta_lamda)*Math.sin(delta_lamda);
-        double c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+        double x1=x*Math.PI/180;
+        double x2= x_other*Math.PI/180;
+        double y1=y*Math.PI/180;
+        double y2=y_other*Math.PI/180;
+        double xx=(y1-y2)*Math.cos((x1+x2)/2);
+        double yy=x1-x2;
+        double distince=R*Math.sqrt(xx*xx+yy*yy);
+        return distince;
 
-        return R*c;
+
+//        double x_other=other.getX();
+//        double y_other=other.getY();
+//        return(Math.sqrt(Math.pow(this.x-x_other,2)+Math.pow(this.y-y_other,2)));
     }
 
 
