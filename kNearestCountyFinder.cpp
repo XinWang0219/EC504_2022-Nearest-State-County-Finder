@@ -10,7 +10,9 @@
 #include <queue>
 #include <math.h>
 #include <map>
+#include <time.h>
 #include <algorithm>
+
 
 using namespace std;
 const float R = 6371.0;
@@ -139,7 +141,15 @@ class NearestStateCountyFinder{
             }
             else if(method.compare("kdt") == 0)
             {
-                
+                cout << "run command kdt" << endl;
+                string KD_program_name = "main";
+                string cmd = "-s";
+                string la_str = to_string(la);
+                string lo_str = to_string(lo);
+                string k_str = to_string(k);
+                string str = "java " + KD_program_name + " " + la_str + " " + lo_str + " " + k_str;
+                const char *command = str.c_str();
+                system(command);
             }
             else
             {
@@ -203,8 +213,13 @@ int main(int argc, char** argv)
             cin >> latitude;
             cin >> longitude;
             cin >> k;
-
+            clock_t startt, endt;
+            double period_time;
+            startt = clock();
             app.search_nearest(method, stof(latitude), stof(longitude), stoi(k), result);
+            endt = clock();
+            period_time = (double)(endt - startt) / CLOCKS_PER_SEC;
+            cout << "Search Time Cost: " << period_time << endl;
             for(int i = 0; i < stoi(k); i++)
             {
                 cout<< i << ": county: " << result[i].name << " state: " << result[i].state << endl;
