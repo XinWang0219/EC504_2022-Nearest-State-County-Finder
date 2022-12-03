@@ -7,7 +7,7 @@ public class main {
 //        System.out.println("helloworld");
         String cmd = args[0];
         KD_tree kd=new KD_tree();
-        String filePath="/Users/jianxiaoyang/Documents/EC504 Algorithm/project_pythonversion/EC504_2022-Nearest-State-County-Finder/data/uscounties.csv";
+        String filePath="./data/uscounties.csv";
         try{
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
             reader.readLine();
