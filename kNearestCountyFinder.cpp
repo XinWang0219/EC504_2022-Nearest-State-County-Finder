@@ -147,7 +147,7 @@ class NearestStateCountyFinder{
                 string la_str = to_string(la);
                 string lo_str = to_string(lo);
                 string k_str = to_string(k);
-                string str = "java " + KD_program_name + " " + la_str + " " + lo_str + " " + k_str;
+                string str = "java " + KD_program_name + " " cmd + " " + la_str + " " + lo_str + " " + k_str;
                 const char *command = str.c_str();
                 system(command);
             }
