@@ -46,7 +46,7 @@ public class test {
             reader.readLine();
             String line = null;
             while((line=reader.readLine())!=null){
-                String item[] = line.split(",");//CSV格式文件为逗号分隔符文件，这里根据逗号切分
+                String item[] = line.split(",");
                 String name=item[0];
                 double la=Double.parseDouble(item[6].substring(1, item[6].length()-2));
                 double lo=Double.parseDouble(item[7].substring(1,item[7].length()-2));
