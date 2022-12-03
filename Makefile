@@ -4,7 +4,9 @@
 TARGET	=  KnearestCounty
 
 C_SOURCES = kNearestCountyFinder.cpp
+JAVA_SOURCES = main.java Point.java KD_tree.java
 C_OBJS     = kNearestCountyFinder.o
+JAVA_OBJS  = main.class Point.class KD_tree.class
 MY_INCLUDES = 
 
 CCX = g++
@@ -17,14 +19,15 @@ all: $(TARGET)
 
 $(TARGET) :   $(C_OBJS)
 	$(CCX) $(CXXFLAGS)  $^ $(LIBDIRS)  -o $@
+	javac $(JAVA_SOURCES)
 
 # Implicit rules: $@ = target name, $< = first prerequisite name, $^ = name of all prerequisites
 #============================================================
 
-ALL_SOURCES = makefile $(C_SOURCES) $(MY_INCLUDES)
+ALL_SOURCES = makefile $(C_SOURCES) $(JAVA_SOURCES) $(MY_INCLUDES)
 
 clean:
-	rm -f $(TARGET) $(C_OBJS) core 
+	rm -f $(TARGET) $(C_OBJS) $(JAVA_OBJS) core 
 	
 	
 tar: $(ALL_SOURCES) $(NOTES)
