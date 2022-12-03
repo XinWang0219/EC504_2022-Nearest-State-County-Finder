@@ -43,7 +43,7 @@ public class test {
         String filePath="/Users/jianxiaoyang/Documents/EC504 Algorithm/project_pythonversion/EC504_2022-Nearest-State-County-Finder/data/uscounties.csv";
         try{
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
-            reader.readLine(); //去表头
+            reader.readLine();
             String line = null;
             while((line=reader.readLine())!=null){
                 String item[] = line.split(",");//CSV格式文件为逗号分隔符文件，这里根据逗号切分

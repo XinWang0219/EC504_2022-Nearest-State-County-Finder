@@ -18,7 +18,6 @@ public class KD_tree {
         points.add(p);
         size++;
     }
-    //找root节点
     public void init(){
         Collections.sort(points);
         this.root=points.get(points.size()/2);
@@ -101,20 +100,20 @@ public class KD_tree {
 //            return (int)(d2-d1);
         });
         Point tmp=this.root;
-        //利用递归搜索
+
         recursionSearch(p,tmp,maxHeap,k);
         while(!maxHeap.isEmpty()){
             res.add(maxHeap.poll());
         }
         return res;
     }
-    //a.compareTo(b)用的是a的judge
+
     private void recursionSearch(Point target,Point cur,PriorityQueue<Point> maxHeap,int k) {
         if(cur==null) {return ;}
-        //先去递归找叶子，然后一层层回来
+
         if(cur.compareTo(target)>=0) {
             recursionSearch(target,cur.left,maxHeap,k);
-            //看看target点到右边平面的直线距离是不是比左边最长距离还短，如果是，就在右边也可能存在点
+
             if(cur.right!=null) {
                 if(maxHeap.isEmpty()||maxHeap.size()<k) {recursionSearch(target, cur.right, maxHeap,k);}
                 else {
@@ -149,7 +148,6 @@ public class KD_tree {
                 }
             }
         }
-        //看看自己满不满足要求
         if(maxHeap.size()<k) {maxHeap.add(cur);}
         else if(cur.distance(target)<maxHeap.peek().distance(target)) {
             maxHeap.poll();
