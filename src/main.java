@@ -2,12 +2,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+import java.util.*;
+
 public class main {
     public static void main(String[] args) {
 //        System.out.println("helloworld");
         String cmd = args[0];
         KD_tree kd=new KD_tree();
-        String filePath="./data/uscounties.csv";
+        String filePath="../input/uscounties.csv";
         try{
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
             reader.readLine();
@@ -35,7 +37,7 @@ public class main {
         for (Point i:res) {
             System.out.println("name:"+i.name+" x:"+i.getX()+" y:"+i.getY());
         }
-        System.out.println("search time:"+(end-start));
+        System.out.println("search time:"+(end-start)+" ms");
 
     }
 }

@@ -1,6 +1,6 @@
 import numpy
 
-from main import County, NearestStateCountyFinder, calc_disctance
+from src.main import County, NearestStateCountyFinder, calc_disctance
 import numpy as np
 
 class IndexSortFinder:
