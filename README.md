@@ -35,7 +35,8 @@ where:
 ## Getting Started
 ### Requirements
 `g++ (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0`\
-`javac 1.8.0_352`
+`javac 1.8.0_352`\`
+`GNU Make 4.2.1`
 ### Makefile
 - compile all codes\
 `make`\
