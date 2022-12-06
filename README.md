@@ -39,7 +39,7 @@ where:
 `GNU Make 4.2.1`
 ### Makefile
 - compile all codes\
-`make`\
+`make`
 ```
 (base) ~:/EC504_2022-Nearest-State-County-Finder/src$ make    
 g++ -g -std=c++1y   -c -o kNearestCountyFinder.o kNearestCountyFinder.cpp
