@@ -8,8 +8,8 @@ Boston University Electronic and Computer Engineering EC504 2022 Project
   - Xin Wang
   - Jianxiao Yang
   - Yuxi Ge
-  - Chenjiayi He
   - Shangzhou Yin
+  - Chenjiayi He
 
 ## Introduction
 Given a huge number of reference points in the US. The project system will first load the points in an `Efficient Nearest Neighbor Search Amenable Data Structure`. Then Users can get K nearest states and countys from the point by entering the `latitude`, `longitude`, and `K`.
